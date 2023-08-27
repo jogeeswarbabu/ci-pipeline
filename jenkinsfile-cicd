@@ -6,7 +6,7 @@ pipeline{
     stages{
         stage('checkout the code'){
             steps{
-                git url:'https://github.com/bcreddydevops/chinna-app.git', branch: 'main'
+                git url:'https://github.com/jogeeswarbabu/ci-piepline.git', branch: 'master'
             }
         }
         stage('build the code'){
