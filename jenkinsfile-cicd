@@ -1,12 +1,12 @@
-pipeline{
+pipeline {
     agent any
     tools{
         maven 'maven-3.9'
     }
-    stages{
-        stage('checkout the code'){
+    stages {
+        stage('Git Checkout'){
             steps{
-                git url:'https://github.com/jogeeswarbabu/ci-piepline.git', branch: 'master'
+                git url:'https://github.com/jogeeswarbabu/ci-pipeline.git',branch:'master'
             }
         }
         stage('build the code'){
@@ -25,7 +25,7 @@ pipeline{
             steps{
              nexusArtifactUploader artifacts: [
                  [
-                     artifactId: 'devops', 
+                     artifactId: 'hiring', 
                      classifier: '', 
                      file: 'target/hiring.war', 
                      type: 'war'
@@ -33,24 +33,21 @@ pipeline{
             ], 
             credentialsId: 'nexus-credentials', 
             groupId: 'in.javahome', 
-            nexusUrl: '52.90.34.45:8081', 
+            nexusUrl: '13.233.125.58:8081', 
             nexusVersion: 'nexus3', 
             protocol: 'http', 
-            repository: 'spring-initial', 
-            version: '0.0.1'
+            repository: 'jogeeswar-app', 
+            version: '0.1'
             }
         }
-		stage('Deploy War file to Tommcat'){
+        stage('Deploy War file to Tommcat'){
             steps{
                sshagent(['tomcat-credentials']) {
-                  sh """
-                    scp -o StrictHostKeyChecking=no target/*.war ubuntu@54.173.252.57:/opt/apache-tomcat-9.0.72/webapps
-                    ssh -o StrictHostKeyChecking=no ubuntu@54.173.252.57 /opt/apache-tomcat-9.0.72/bin/shutdown.sh
-                    ssh -o StrictHostKeyChecking=no ubuntu@54.173.252.57 /opt/apache-tomcat-9.0.72/bin/startup.sh
-					
-		          """          
+                  sh 'scp -o StrictHostKeyChecking=no target/hiring.war ubuntu@13.233.105.110:/opt/tomcat-9/webapps'
+                    
                }
             }
         }
-    }   
- }
+        
+    }
+}
